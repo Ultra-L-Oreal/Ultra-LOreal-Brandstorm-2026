@@ -6,6 +6,7 @@ import type { RootState } from "../../../store/store";
 import { Link, useNavigate } from "react-router-dom";
 
 const navItems = [
+  { label: "Home", href: "/", scroll: false },
   { label: "How It Works", href: "/how", scroll: true },
   { label: "Brands", href: "/brands", scroll: false },
   { label: "Enterprise", href: "/enterprise", scroll: false },

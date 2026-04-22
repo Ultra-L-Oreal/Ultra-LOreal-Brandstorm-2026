@@ -1,9 +1,15 @@
-// frontend/src/pages/order/OrderFlight.tsx
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import Header from '../../components/global/header/Header';
 import Footer from '../../components/global/footer/Footer';
 import api from '../../services/api/httpClient';
+import {
+  brandBySlug,
+  brandRegistry,
+  type BrandProfile,
+  type BrandSignatureScent,
+  type BrandSlug,
+} from '../../data/brands';
 
 type SafetyStatus = 'SAFE' | 'CAUTION' | 'AVOID';
 type ShippingMethod = 'SHIP' | 'PICKUP';
@@ -11,6 +17,7 @@ type ShippingMethod = 'SHIP' | 'PICKUP';
 type Recommendation = {
   fragranceId: string;
   brand: string;
+  brandSlug: BrandSlug;
   name: string;
   score: number;
   safetyStatus: SafetyStatus;
@@ -18,6 +25,14 @@ type Recommendation = {
   longevityEstimate: number;
   notes: string[];
   image?: string;
+  family?: string;
+  mood?: string;
+  description?: string;
+  longevity?: string;
+  sillage?: string;
+  bestFor?: string[];
+  ultraFit?: string[];
+  safetyNote?: string;
 };
 
 type OrderResponse = {
@@ -30,79 +45,30 @@ type OrderResponse = {
 
 type DraftFlight = {
   intent: string;
+  allergies: string[];
   outfitName?: string;
   selectedIds: string[];
   shippingMethod: ShippingMethod;
+  preferredBrand?: string;
 };
 
-const MOCK_RECOMMENDATIONS: Recommendation[] = [
-  {
-    fragranceId: 'ysl-libre',
-    brand: 'Yves Saint Laurent',
-    name: 'Libre',
-    score: 96,
-    safetyStatus: 'SAFE',
-    explain: 'Strong fit for a bold, polished evening profile with warm floral confidence.',
-    longevityEstimate: 0.84,
-    notes: ['lavender', 'orange blossom', 'musk'],
-    image: '/assets/brands/ysl-hero.jpg',
-  },
-  {
-    fragranceId: 'lancome-la-vie-est-belle',
-    brand: 'Lancôme',
-    name: 'La Vie Est Belle',
-    score: 92,
-    safetyStatus: 'SAFE',
-    explain: 'Elegant sweetness with refined warmth for soft luxury and high appeal.',
-    longevityEstimate: 0.78,
-    notes: ['iris', 'praline', 'patchouli'],
-    image: '/assets/brands/lancome-hero.jpg',
-  },
-  {
-    fragranceId: 'armani-si',
-    brand: 'Giorgio Armani',
-    name: 'Si',
-    score: 89,
-    safetyStatus: 'CAUTION',
-    explain: 'Quietly sensual and polished, with a slightly richer trail that may suit evening wear.',
-    longevityEstimate: 0.73,
-    notes: ['blackcurrant', 'rose', 'vanilla'],
-    image: '/assets/brands/armani-hero.jpg',
-  },
-  {
-    fragranceId: 'prada-paradoxe',
-    brand: 'Prada',
-    name: 'Paradoxe',
-    score: 87,
-    safetyStatus: 'SAFE',
-    explain: 'Modern, intelligent, and softly radiant — a clean couture profile.',
-    longevityEstimate: 0.76,
-    notes: ['neroli', 'amber', 'white musk'],
-    image: '/assets/brands/prada-hero.jpg',
-  },
-  {
-    fragranceId: 'valentino-born-in-roma',
-    brand: 'Valentino',
-    name: 'Born in Roma Donna',
-    score: 85,
-    safetyStatus: 'CAUTION',
-    explain: 'Couture floral texture with noticeable presence and a fuller signature trail.',
-    longevityEstimate: 0.72,
-    notes: ['jasmine', 'vanilla', 'woods'],
-    image: '/assets/brands/valentino-hero.jpg',
-  },
-  {
-    fragranceId: 'maison-margiela-replica',
-    brand: 'Maison Margiela',
-    name: 'Replica Jazz Club',
-    score: 81,
-    safetyStatus: 'SAFE',
-    explain: 'Atmospheric and skin-close for users who want a more intimate and conceptual scent.',
-    longevityEstimate: 0.67,
-    notes: ['rum', 'tobacco', 'vanilla'],
-    image: '/assets/brands/margiela-hero.jpg',
-  },
-];
+type RecommendationsResponse = {
+  top3?: Recommendation[];
+  alternatives?: Recommendation[];
+};
+
+function isBrandSlug(value: string | null | undefined): value is BrandSlug {
+  if (!value) return false;
+  return value in brandBySlug;
+}
+
+function slugify(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
 
 function safetyBadge(status: SafetyStatus) {
   if (status === 'SAFE') return 'border-emerald-400/30 text-emerald-300 bg-emerald-400/10';
@@ -122,34 +88,189 @@ function scoreLabel(score: number) {
 
 function normalizeDraft(raw: string | null): DraftFlight | null {
   if (!raw) return null;
+
   try {
     const parsed = JSON.parse(raw) as Partial<DraftFlight>;
     if (!parsed || !Array.isArray(parsed.selectedIds)) return null;
+
     return {
       intent: typeof parsed.intent === 'string' ? parsed.intent : '',
+      allergies: Array.isArray(parsed.allergies)
+        ? parsed.allergies.filter((item): item is string => typeof item === 'string')
+        : [],
       outfitName: typeof parsed.outfitName === 'string' ? parsed.outfitName : undefined,
       selectedIds: parsed.selectedIds.filter((id): id is string => typeof id === 'string'),
       shippingMethod: parsed.shippingMethod === 'PICKUP' ? 'PICKUP' : 'SHIP',
+      preferredBrand: typeof parsed.preferredBrand === 'string' ? parsed.preferredBrand : undefined,
     };
   } catch {
     return null;
   }
 }
 
+function deriveSafetyStatus(scent: BrandSignatureScent): SafetyStatus {
+  const text = `${scent.name} ${scent.mood} ${scent.description ?? ''} ${scent.safetyNote ?? ''}`.toLowerCase();
+
+  if (
+    text.includes('sensitive') ||
+    text.includes('careful') ||
+    text.includes('strong') ||
+    text.includes('high trail') ||
+    text.includes('projection')
+  ) {
+    return 'CAUTION';
+  }
+
+  return 'SAFE';
+}
+
+function deriveLongevityEstimate(scent: BrandSignatureScent): number {
+  const text = `${scent.mood} ${scent.description ?? ''} ${scent.longevity ?? ''}`.toLowerCase();
+
+  if (text.includes('very long')) return 0.86;
+  if (text.includes('long lasting')) return 0.8;
+  if (text.includes('strong')) return 0.77;
+  if (text.includes('moderate')) return 0.7;
+  return 0.74;
+}
+
+function buildRecommendations(
+  selectedBrandSlug: BrandSlug | null,
+  selectedScentName: string | null,
+  intent: string,
+  allergies: string[]
+): Recommendation[] {
+  const focusBrand = selectedBrandSlug ? brandBySlug[selectedBrandSlug] : null;
+  const exactScent = selectedScentName?.trim().toLowerCase() ?? null;
+  const intentText = intent.trim().toLowerCase();
+  const allergyText = allergies.join(' ').toLowerCase();
+
+  const all = brandRegistry.flatMap((brand: BrandProfile, brandIndex) =>
+    brand.signatureScents.map((scent, scentIndex) => {
+      const fragranceId = `${brand.slug}-${slugify(scent.name)}`;
+      const scentSlug = slugify(scent.name).toLowerCase();
+      const brandScoreBoost = focusBrand?.slug === brand.slug ? 14 : 0;
+      const exactBoost = exactScent && (exactScent === scentSlug || exactScent === fragranceId.toLowerCase()) ? 12 : 0;
+
+      const scentText = [
+        brand.name,
+        brand.category,
+        brand.tagline,
+        scent.name,
+        scent.mood,
+        scent.description ?? '',
+        ...(scent.notes ?? []),
+        ...(scent.ultraFit ?? []),
+        ...(scent.bestFor ?? []),
+      ]
+        .join(' ')
+        .toLowerCase();
+
+      const intentHits = intentText
+        ? intentText
+            .split(/\s+/)
+            .filter((word) => word.length > 2)
+            .reduce((count, word) => (scentText.includes(word) ? count + 1 : count), 0)
+        : 0;
+
+      const allergyPenalty = allergies.length > 0 && scentText.includes(allergyText) ? 10 : 0;
+
+      const scoreBase =
+        95 -
+        brandIndex * 1.2 -
+        scentIndex * 1.6 +
+        brandScoreBoost +
+        exactBoost +
+        intentHits * 2 -
+        allergyPenalty;
+
+      const score = Math.max(65, Math.min(99, Math.round(scoreBase)));
+
+      return {
+        fragranceId,
+        brand: brand.name,
+        brandSlug: brand.slug,
+        name: scent.name,
+        score,
+        safetyStatus: deriveSafetyStatus(scent),
+        explain:
+          scent.description ??
+          `A signature expression from ${brand.name}, curated for this Scent Flight.`,
+        longevityEstimate: deriveLongevityEstimate(scent),
+        notes: scent.notes,
+        image: scent.image ?? brand.image,
+        family: scent.family,
+        mood: scent.mood,
+        description: scent.description,
+        longevity: scent.longevity,
+        sillage: scent.sillage,
+        bestFor: scent.bestFor,
+        ultraFit: scent.ultraFit,
+        safetyNote: scent.safetyNote,
+      };
+    })
+  );
+
+  const sorted = all.sort((a, b) => {
+    if (focusBrand) {
+      const aFocus = a.brandSlug === focusBrand.slug ? 1 : 0;
+      const bFocus = b.brandSlug === focusBrand.slug ? 1 : 0;
+      if (aFocus !== bFocus) return bFocus - aFocus;
+    }
+
+    if (exactScent) {
+      const aExact =
+        slugify(a.name).toLowerCase() === exactScent ||
+        a.fragranceId.toLowerCase() === exactScent ||
+        slugify(`${a.brandSlug}-${a.name}`).toLowerCase() === exactScent
+          ? 1
+          : 0;
+      const bExact =
+        slugify(b.name).toLowerCase() === exactScent ||
+        b.fragranceId.toLowerCase() === exactScent ||
+        slugify(`${b.brandSlug}-${b.name}`).toLowerCase() === exactScent
+          ? 1
+          : 0;
+
+      if (aExact !== bExact) return bExact - aExact;
+    }
+
+    return b.score - a.score;
+  });
+
+  return sorted;
+}
+
 export default function OrderFlight() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-  const [intent, setIntent] = useState('Bold evening');
-  const [outfitName, setOutfitName] = useState('');
+  const brandParam = searchParams.get('brand');
+  const scentParam = searchParams.get('scent');
+  const focusBrand = isBrandSlug(brandParam) ? brandBySlug[brandParam] : null;
+
+  const draft = useMemo(() => normalizeDraft(sessionStorage.getItem('ultra_draft_flight')), []);
+
+  const [intent, setIntent] = useState(draft?.intent || 'Bold evening');
+  const [allergiesInput, setAllergiesInput] = useState((draft?.allergies || []).join(', '));
+  const [outfitName, setOutfitName] = useState(draft?.outfitName || '');
   const [outfitPreview, setOutfitPreview] = useState<string | null>(null);
-  const [shippingMethod, setShippingMethod] = useState<ShippingMethod>('SHIP');
+  const [shippingMethod, setShippingMethod] = useState<ShippingMethod>(draft?.shippingMethod || 'SHIP');
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [consentAccepted, setConsentAccepted] = useState(false);
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [selectedIds, setSelectedIds] = useState<string[]>(draft?.selectedIds || []);
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
-  const [loadedFromDraft, setLoadedFromDraft] = useState(false);
+  const [alternatives, setAlternatives] = useState<Recommendation[]>([]);
+  const [showAlternatives, setShowAlternatives] = useState(false);
+  //const [mode, setMode] = useState<'idle' | 'generating' | 'ready'>('idle');
+  const [preferredBrand, setPreferredBrand] = useState<string>(draft?.preferredBrand || focusBrand?.slug || '');
+
+  const allergies = useMemo(
+    () => allergiesInput.split(',').map((item) => item.trim()).filter(Boolean),
+    [allergiesInput]
+  );
 
   const selectedRecommendations = useMemo(
     () => recommendations.filter((item) => selectedIds.includes(item.fragranceId)),
@@ -158,66 +279,38 @@ export default function OrderFlight() {
 
   const selectedCount = selectedIds.length;
   const remaining = Math.max(0, 3 - selectedCount);
+  const activeFocusLabel = focusBrand?.name ?? null;
+  const activeScentLabel = scentParam ?? null;
+
+  // useEffect(() => {
+  //   if (draft && draft.selectedIds?.length) {
+  //     setMode('ready');
+  //   }
+  // }, [draft]);
+  const [mode, setMode] = useState(() => {
+  if (draft && draft.selectedIds?.length) return 'ready';
+  return 'input';
+});
 
   useEffect(() => {
-    const draft = normalizeDraft(sessionStorage.getItem('ultra_draft_flight'));
-    if (draft && !loadedFromDraft) {
-      setIntent(draft.intent || 'Bold evening');
-      setSelectedIds(draft.selectedIds || []);
-      setShippingMethod(draft.shippingMethod || 'SHIP');
-      setLoadedFromDraft(true);
-    }
-  }, [loadedFromDraft]);
-
-  useEffect(() => {
-    const draft: DraftFlight = {
+    const payload: DraftFlight = {
       intent,
+      allergies,
       outfitName: outfitName || undefined,
       selectedIds,
       shippingMethod,
-    };
-    sessionStorage.setItem('ultra_draft_flight', JSON.stringify(draft));
-  }, [intent, outfitName, selectedIds, shippingMethod]);
-
-  useEffect(() => {
-    const loadRecommendations = async () => {
-      setLoading(true);
-      setError('');
-      try {
-        const params = new URLSearchParams();
-        params.set('intent', intent);
-        const res = await api.get<{ results?: Recommendation[] }>(`/v1/recommendations?${params.toString()}`);
-
-        const results = res?.results && res.results.length > 0 ? res.results : MOCK_RECOMMENDATIONS;
-        setRecommendations(results.slice(0, 6));
-
-        const top3 = results.slice(0, 3);
-        if (selectedIds.length === 0) {
-          setSelectedIds(top3.map((item) => item.fragranceId));
-        }
-      } catch {
-        setRecommendations(MOCK_RECOMMENDATIONS);
-        if (selectedIds.length === 0) {
-          setSelectedIds(MOCK_RECOMMENDATIONS.slice(0, 3).map((item) => item.fragranceId));
-        }
-      } finally {
-        setLoading(false);
-      }
+      preferredBrand: preferredBrand || undefined,
     };
 
-    loadRecommendations();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [intent]);
+    sessionStorage.setItem('ultra_draft_flight', JSON.stringify(payload));
+  }, [intent, allergies, outfitName, selectedIds, shippingMethod, preferredBrand]);
 
-  const intentChips = [
-    'Bold evening',
-    'Soft romance',
-    'Clean luxury',
-    'Statement trail',
-    'Daytime polish',
-    'Mystery',
-  ];
-
+  // useEffect(() => {
+  //   if (focusBrand && preferredBrand !== focusBrand.slug) {
+  //     setPreferredBrand(focusBrand.slug);
+  //   }
+  // }, [focusBrand, preferredBrand]);
+  
   const handleFileUpload = (file: File | null) => {
     if (!file) {
       setOutfitPreview(null);
@@ -234,25 +327,86 @@ export default function OrderFlight() {
     reader.readAsDataURL(file);
   };
 
-  const toggleSelection = (fragranceId: string) => {
+  const handleGenerate = async () => {
+    setLoading(true);
     setError('');
-    setSelectedIds((current) => {
-      if (current.includes(fragranceId)) {
-        return current.filter((id) => id !== fragranceId);
+    setMode('generating');
+
+    const chosenBrand = isBrandSlug(preferredBrand) ? preferredBrand : focusBrand?.slug ?? null;
+
+    try {
+      const res = await api.post<RecommendationsResponse>('/v1/recommendations', {
+        intent,
+        allergies,
+        preferredBrand: chosenBrand || undefined,
+        outfitImage: outfitPreview,
+        outfitName: outfitName || undefined,
+        scent: scentParam || undefined,
+      });
+
+      const apiTop3 = res?.top3 ?? [];
+      const apiAlternatives = res?.alternatives ?? [];
+
+      if (apiTop3.length > 0) {
+        setRecommendations(apiTop3.slice(0, 3));
+        setAlternatives(apiAlternatives);
+        setSelectedIds(apiTop3.slice(0, 3).map((item) => item.fragranceId));
+        setMode('ready');
+        return;
       }
 
-      if (current.length >= 3) {
+      throw new Error('Empty recommendation result');
+    } catch (err) {
+      console.warn('Recommendation API unavailable, using local ranking.', err);
+
+      const ranked = buildRecommendations(chosenBrand, scentParam, intent, allergies);
+      const exact = scentParam
+        ? ranked.find(
+            (item) =>
+              item.name.toLowerCase() === scentParam.toLowerCase() ||
+              item.fragranceId.toLowerCase() === scentParam.toLowerCase()
+          )
+        : undefined;
+
+      const top3 = [exact, ...ranked]
+        .filter((item): item is Recommendation => Boolean(item))
+        .filter((item, index, arr) => arr.findIndex((x) => x.fragranceId === item.fragranceId) === index)
+        .slice(0, 3);
+
+      const extra = ranked.filter((item) => !top3.some((pick) => pick.fragranceId === item.fragranceId)).slice(0, 6);
+
+      setRecommendations(top3);
+      setAlternatives(extra);
+      setSelectedIds(top3.map((item) => item.fragranceId));
+      setMode('ready');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const toggleSelection = (id: string) => {
+    setError('');
+    setSelectedIds((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((item) => item !== id);
+      }
+
+      if (prev.length >= 3) {
         setError('Your Scent Flight can include up to 3 micro-vials.');
-        return current;
+        return prev;
       }
 
-      return [...current, fragranceId];
+      return [...prev, id];
     });
   };
 
   const handleAutoPickTop3 = () => {
-    const top3 = recommendations.slice(0, 3).map((item) => item.fragranceId);
-    setSelectedIds(top3);
+    if (recommendations.length === 0) {
+      handleGenerate();
+      return;
+    }
+
+    setSelectedIds(recommendations.slice(0, 3).map((item) => item.fragranceId));
   };
 
   const handleSubmit = async () => {
@@ -274,8 +428,12 @@ export default function OrderFlight() {
       const payload = {
         selectedFragranceIds: selectedIds,
         intent,
+        allergies,
         shippingMethod,
         outfitName: outfitName || undefined,
+        brand: focusBrand?.slug || undefined,
+        scent: scentParam || undefined,
+        preferredBrand: isBrandSlug(preferredBrand) ? preferredBrand : undefined,
       };
 
       const response = await api.post<OrderResponse>('/v1/samples/order', payload);
@@ -309,9 +467,11 @@ export default function OrderFlight() {
         'ultra_draft_flight',
         JSON.stringify({
           intent,
+          allergies,
           outfitName: outfitName || undefined,
           selectedIds,
           shippingMethod,
+          preferredBrand: preferredBrand || undefined,
         })
       );
       navigate('/auth/login', {
@@ -331,14 +491,13 @@ export default function OrderFlight() {
         <div className="container relative z-10">
           <div className="max-w-4xl">
             <p className="text-ultraGold uppercase tracking-[0.35em] text-xs mb-4">
-              BUILD YOUR Scent Flight
+              Build your Scent Flight
             </p>
             <h1 className="text-4xl md:text-6xl font-serif leading-tight mb-5">
-              Choose 3 micro-vials that fit the moment.
+              Let the system generate your top 3 fragrances.
             </h1>
             <p className="text-neutral-300 text-lg md:text-xl max-w-3xl leading-relaxed mb-8">
-              Upload your look, define your intent, and select from curated luxury recommendations.
-              Your flight is validated through blind micro-sample testing and safety-aware matching.
+              Enter your mood, allergies, photo, and optional brand preference. Ultra will rank the best matches across the full system, then let you refine the top 3 before checkout.
             </p>
 
             <div className="flex flex-wrap gap-4">
@@ -348,19 +507,48 @@ export default function OrderFlight() {
               >
                 Find My Brand
               </Link>
-              <Link
-                to="/brands"
-                className="px-5 py-3 rounded-md border border-white/10 bg-white/5 text-neutral-100 hover:border-ultraGold/50 transition"
-              >
-                Compare Brands
-              </Link>
               <button
-                onClick={handleAutoPickTop3}
+                onClick={handleGenerate}
                 className="px-5 py-3 rounded-md bg-ultraGold text-black font-semibold"
               >
-                Auto-select top 3
+                Generate My Flight
+              </button>
+              <button
+                onClick={() => {
+                  sessionStorage.removeItem('ultra_draft_flight');
+                  setIntent('Bold evening');
+                  setAllergiesInput('');
+                  setOutfitName('');
+                  setOutfitPreview(null);
+                  setShippingMethod('SHIP');
+                  setPreferredBrand(focusBrand?.slug || '');
+                  setSelectedIds([]);
+                  setRecommendations([]);
+                  setAlternatives([]);
+                  setShowAlternatives(false);
+                  setMode('idle');
+                  setError('');
+                }}
+                className="px-5 py-3 rounded-md border border-white/10 bg-white/5 text-neutral-100 hover:border-ultraGold/50 transition"
+              >
+                Reset
               </button>
             </div>
+
+            {(activeFocusLabel || activeScentLabel) && (
+              <div className="mt-6 flex flex-wrap gap-3">
+                {activeFocusLabel && (
+                  <span className="rounded-full border border-ultraGold/30 bg-ultraGold/10 px-4 py-2 text-sm text-ultraGold">
+                    Focus: {activeFocusLabel}
+                  </span>
+                )}
+                {activeScentLabel && (
+                  <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-neutral-200">
+                    Starting from: {activeScentLabel}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -384,7 +572,7 @@ export default function OrderFlight() {
               </div>
 
               <div className="flex flex-wrap gap-3 mb-6">
-                {intentChips.map((chip) => (
+                {['Bold evening', 'Soft romance', 'Clean luxury', 'Statement trail', 'Daytime polish', 'Mystery'].map((chip) => (
                   <button
                     key={chip}
                     type="button"
@@ -410,7 +598,7 @@ export default function OrderFlight() {
                 className="w-full rounded-xl border border-white/10 bg-black/30 px-5 py-4 text-white placeholder:text-neutral-500 outline-none focus:border-ultraGold/60 transition"
               />
 
-              <div className="mt-6 rounded-2xl border border-dashed border-white/10 bg-black/20 p-6">
+              <div className="mt-6 rounded-2xl border border-dashed border-white/10 bg-black/20 p-6 space-y-5">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div>
                     <p className="text-sm text-neutral-400 mb-1">Upload your look</p>
@@ -431,13 +619,13 @@ export default function OrderFlight() {
                 </div>
 
                 {outfitName && (
-                  <div className="mt-4 text-sm text-neutral-300">
+                  <div className="text-sm text-neutral-300">
                     <span className="text-ultraGold">Selected:</span> {outfitName}
                   </div>
                 )}
 
                 {outfitPreview && (
-                  <div className="mt-5 overflow-hidden rounded-2xl border border-white/10">
+                  <div className="overflow-hidden rounded-2xl border border-white/10">
                     <img
                       src={outfitPreview}
                       alt="Outfit preview"
@@ -445,6 +633,39 @@ export default function OrderFlight() {
                     />
                   </div>
                 )}
+              </div>
+
+              <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-6">
+                <label className="block text-sm text-neutral-400 mb-2">
+                  Allergies and sensitivity notes
+                </label>
+                <input
+                  value={allergiesInput}
+                  onChange={(e) => setAllergiesInput(e.target.value)}
+                  placeholder="e.g. floral, strong projection, headache trigger"
+                  className="w-full rounded-xl border border-white/10 bg-black/30 px-5 py-4 text-white placeholder:text-neutral-500 outline-none focus:border-ultraGold/60 transition"
+                />
+                <p className="mt-3 text-xs text-neutral-500">
+                  Use commas between concerns. The AI will avoid unsafe matches where possible.
+                </p>
+              </div>
+
+              <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-6">
+                <label className="block text-sm text-neutral-400 mb-2">
+                  Preferred brand (optional)
+                </label>
+                <select
+                  value={preferredBrand}
+                  onChange={(e) => setPreferredBrand(e.target.value)}
+                  className="w-full rounded-xl border border-white/10 bg-black/30 px-5 py-4 text-white outline-none focus:border-ultraGold/60 transition"
+                >
+                  <option value="">All brands</option>
+                  {brandRegistry.map((brand) => (
+                    <option key={brand.slug} value={brand.slug} className="text-black">
+                      {brand.name}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
@@ -455,17 +676,16 @@ export default function OrderFlight() {
                     STEP 2
                   </p>
                   <h2 className="text-2xl md:text-3xl font-serif">
-                    Select 3 fragrances
+                    {mode === 'generating' ? 'Curating your flight...' : 'Your top 3'}
                   </h2>
                 </div>
                 <p className="text-neutral-400 text-sm max-w-md">
-                  Top recommendations are pre-ranked by match, longevity, and safety.
-                  Each selection becomes one blind micro-vial in your Scent Flight.
+                  Ultra will rank the best matches across the system, then keep the flight focused on the three strongest choices.
                 </p>
               </div>
 
               {loading ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                   {[1, 2, 3].map((item) => (
                     <div
                       key={item}
@@ -473,9 +693,13 @@ export default function OrderFlight() {
                     />
                   ))}
                 </div>
+              ) : recommendations.length === 0 ? (
+                <div className="rounded-2xl border border-white/10 bg-black/20 p-6 text-neutral-400">
+                  Generate your flight to see the top 3 fragrances.
+                </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-                  {recommendations.map((item) => {
+                  {recommendations.map((item, index) => {
                     const selected = selectedIds.includes(item.fragranceId);
                     const disabled = !selected && selectedCount >= 3;
 
@@ -502,11 +726,9 @@ export default function OrderFlight() {
                         <div className="flex items-start justify-between gap-3 mb-3">
                           <div>
                             <p className="text-xs uppercase tracking-[0.25em] text-ultraGold/70 mb-1">
-                              {item.brand}
+                              #{index + 1} • {item.brand}
                             </p>
-                            <h3 className="text-xl font-serif text-white">
-                              {item.name}
-                            </h3>
+                            <h3 className="text-xl font-serif text-white">{item.name}</h3>
                           </div>
 
                           <span
@@ -559,6 +781,66 @@ export default function OrderFlight() {
                   })}
                 </div>
               )}
+
+              {selectedIds.length === 0 && recommendations.length > 0 && (
+                <div className="mt-5 text-sm text-neutral-400">
+                  The AI has already selected the top 3. You can adjust them above if needed.
+                </div>
+              )}
+
+              <div className="mt-8 flex flex-wrap gap-4">
+                <button
+                  onClick={handleAutoPickTop3}
+                  className="px-5 py-3 rounded-md border border-white/10 bg-white/5 text-neutral-100 hover:border-ultraGold/50 transition"
+                >
+                  Auto-select top 3
+                </button>
+
+                <button
+                  onClick={() => setShowAlternatives((prev) => !prev)}
+                  className="px-5 py-3 rounded-md border border-white/10 bg-white/5 text-neutral-100 hover:border-ultraGold/50 transition"
+                >
+                  {showAlternatives ? 'Hide alternatives' : 'Explore alternatives'}
+                </button>
+              </div>
+
+              {showAlternatives && alternatives.length > 0 && (
+                <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {alternatives.map((item) => {
+                    const selected = selectedIds.includes(item.fragranceId);
+                    return (
+                      <article
+                        key={item.fragranceId}
+                        className="rounded-2xl border border-white/10 bg-black/20 p-4"
+                      >
+                        <div className="flex items-center justify-between gap-3 mb-2">
+                          <div>
+                            <p className="text-xs uppercase tracking-[0.22em] text-neutral-500 mb-1">
+                              {item.brand}
+                            </p>
+                            <h4 className="text-lg font-serif text-white">{item.name}</h4>
+                          </div>
+                          <span className={`shrink-0 rounded-full border px-3 py-1 text-xs font-medium ${safetyBadge(item.safetyStatus)}`}>
+                            {safetyLabel(item.safetyStatus)}
+                          </span>
+                        </div>
+                        <p className="text-sm text-neutral-300 mb-3">{item.explain}</p>
+                        <button
+                          type="button"
+                          onClick={() => toggleSelection(item.fragranceId)}
+                          className={`w-full rounded-xl px-4 py-3 font-semibold transition ${
+                            selected
+                              ? 'bg-ultraGold text-black'
+                              : 'bg-black/25 text-white border border-white/10 hover:border-ultraGold/50'
+                          }`}
+                        >
+                          {selected ? 'Remove from flight' : 'Swap into flight'}
+                        </button>
+                      </article>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -577,11 +859,11 @@ export default function OrderFlight() {
 
               <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
                 <p className="text-ultraGold uppercase tracking-[0.3em] text-xs mb-2">
-                  COMPARE BRANDS
+                  HOW IT WORKS
                 </p>
-                <h3 className="text-2xl font-serif mb-3">See the houses side by side</h3>
+                <h3 className="text-2xl font-serif mb-3">Three choices. One flight.</h3>
                 <p className="text-neutral-300 leading-relaxed">
-                  Compare the personality, notes, and signature scents of luxury brands before you choose.
+                  You select 3 micro-vials, confirm delivery, and then test them blind at home.
                 </p>
               </div>
             </div>

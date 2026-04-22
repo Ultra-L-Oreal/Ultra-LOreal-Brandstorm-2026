@@ -16,8 +16,16 @@ export type BrandSlug =
 
 export type BrandSignatureScent = {
   name: string;
+  image?: string;
   notes: string[];
   mood: string;
+  family?: string;
+  description?: string;
+  longevity?: string;
+  sillage?: string;
+  bestFor?: string[];
+  ultraFit?: string[];
+  safetyNote?: string;
 };
 
 export type BrandProfile = {
@@ -283,13 +291,33 @@ export const brandRegistry: BrandProfile[] = [
     signatureScents: [
       {
         name: "Angel",
-        notes: ["patchouli", "praline", "red fruits"],
+        image: "/assets/scents/mugler-angel.jpg",
+        family: "Gourmand Amber",
         mood: "Iconic, loud, and addictive.",
+        description:
+          "A signature fragrance with bold sweetness, strong projection, and a highly recognizable trail.",
+        notes: ["patchouli", "praline", "red fruits"],
+        longevity: "Very long lasting",
+        sillage: "Strong",
+        bestFor: ["Night-out looks", "Statement wear", "Confident personalities"],
+        ultraFit: ["High-impact evening", "Memorable first impression", "Bold trail lovers"],
+        safetyNote:
+          "Ultra may flag this for users sensitive to intense gourmand sweetness or strong projection.",
       },
       {
         name: "Alien",
-        notes: ["jasmine", "amberwood", "white amber"],
+        image: "/assets/scents/mugler-alien.jpg",
+        family: "Amber Floral",
         mood: "Mystical, luminous, and potent.",
+        description:
+          "A radiant scent with a powerful floral heart and a rich amber finish.",
+        notes: ["jasmine", "amberwood", "white amber"],
+        longevity: "Long lasting",
+        sillage: "Strong",
+        bestFor: ["Elegant evenings", "Couture styling", "Luminous signature wear"],
+        ultraFit: ["Luxury presence", "Evening glamour", "Distinctive identity"],
+        safetyNote:
+          "Ultra may recommend a lighter alternative if the user prefers subtle, low-projection fragrances.",
       },
     ],
     olfactiveProfile: ["intense gourmand", "amber power", "high trail", "signature boldness"],
