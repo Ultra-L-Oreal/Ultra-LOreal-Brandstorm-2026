@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* design tokens */
+:root{
+  --ultra-bg: #0b0a0a;
+  --ultra-gold: #c9a86b;
+  --ultra-warm: #7d5a3a;
+}
+
+/* global styles *
+body {
+  @apply bg-ultraBg text-white antialiased;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system;
+}*
+body {
+  background-color: theme('colors.ultraBg');
+  @apply text-white antialiased;
+}*/
+
+
+body {
+  background: var(--ultra-bg);
+}
+
+
+a { color: var(--ultra-gold); }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
