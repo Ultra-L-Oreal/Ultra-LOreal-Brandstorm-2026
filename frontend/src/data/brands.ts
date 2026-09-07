@@ -78,42 +78,48 @@ export const brandRegistry: BrandProfile[] = [
     name: "Yves Saint Laurent",
     category: "Couture Icon",
     tagline: "Bold. Magnetic. Night-ready.",
-    intro:
-      "YSL beauty sits at the intersection of fashion, attitude, and modern seduction.",
-    heroStatement:
-      "A house for people who want fragrance to feel like presence — sharp, glamorous, and unforgettable.",
-    description:
-      "Known for powerful signatures like Libre and Black Opium, YSL moves with confident contrast: luminous florals, addictive sweetness, and deep sensuality.",
+    intro: "YSL beauty sits at the intersection of fashion, attitude, and modern seduction.",
+    heroStatement: "A house for people who want fragrance to feel like presence — sharp, glamorous, and unforgettable.",
+    description: "Known for powerful signatures like Libre and Black Opium, YSL moves with confident contrast: luminous florals, addictive sweetness, and deep sensuality.",
     image: "/assets/brands/ysl-hero.png",
     signatureScents: [
       {
         name: "Libre",
+        image: "/assets/scents/ysl-libre.jpg",
+        family: "Floral Lavender",
         notes: ["lavender", "orange blossom", "musk"],
         mood: "Confident, radiant, feminine power.",
+        description: "A grand floral fragrance that balances the burning sensuality of orange blossom with the coolness of French lavender.",
+        longevity: "Long lasting",
+        sillage: "Strong",
+        bestFor: ["Power dressing", "Professional milestones", "Signature daily wear"],
+        ultraFit: ["Ambitious profiles", "Floral-woody lovers", "Luminous presence"],
+        safetyNote: "Ultra identifies lavender as a potential sharp note for users sensitive to aromatic herbals."
       },
       {
         name: "Black Opium",
+        image: "/assets/scents/ysl-black-opium.jpg",
+        family: "Amber Vanilla",
         notes: ["coffee", "vanilla", "white flowers"],
         mood: "Evening glamour with a dark sweet trail.",
-      },
-      {
-        name: "MYSLF",
-        notes: ["bergamot", "orange blossom", "woods"],
-        mood: "Modern, clean, and self-defined masculinity.",
-      },
+        description: "An addictive, high-energy scent known for its electrifying coffee note and warm, seductive vanilla base.",
+        longevity: "Long lasting",
+        sillage: "Strong",
+        bestFor: ["Late nights", "Winter fashion", "Addictive scent trails"],
+        ultraFit: ["Gourmand lovers", "Evening socialites", "Bold sweetness"],
+        safetyNote: "Ultra may flag the heavy vanilla and coffee accords for users who prefer 'skin-scent' profiles."
+      }
     ],
     olfactiveProfile: ["floral-amber", "gourmand", "fresh sensual", "statement trail"],
     ultraMatch: [
       "Best for bold evenings, events, and memorable first impressions.",
       "Matches users who want a visible fragrance signature.",
-      "Strong fit for dressy outfits, black-tie, and confident styling.",
+      "Strong fit for dressy outfits, black-tie, and confident styling."
     ],
-    refillStory:
-      "YSL supports a refill-minded luxury ritual, helping iconic bottles remain beautiful and long-lasting.",
-    safetyStory:
-      "Ultra can flag brighter florals and sweet accords against personal sensitivity profiles before recommendation.",
+    refillStory: "YSL supports a refill-minded luxury ritual, helping iconic bottles remain beautiful and long-lasting.",
+    safetyStory: "Ultra can flag brighter florals and sweet accords against personal sensitivity profiles before recommendation.",
     luxurySignals: ["fashion-house heritage", "global bestseller", "strong identity", "high recall"],
-    relatedSlugs: ["lancome", "armani", "prada"],
+    relatedSlugs: ["lancome", "armani", "prada"]
   },
   {
     slug: "lancome",
@@ -121,42 +127,48 @@ export const brandRegistry: BrandProfile[] = [
     name: "Lancôme",
     category: "Couture Icon",
     tagline: "Elegant. Radiant. Timeless.",
-    intro:
-      "Lancôme is the language of luminous femininity, refined sweetness, and polished French luxury.",
-    heroStatement:
-      "A house built for graceful signatures, romantic warmth, and classic elegance that still feels current.",
-    description:
-      "La Vie Est Belle and Trésor define a warm, optimistic, and feminine fragrance identity with luxurious comfort and depth.",
+    intro: "Lancôme is the language of luminous femininity, refined sweetness, and polished French luxury.",
+    heroStatement: "A house built for graceful signatures, romantic warmth, and classic elegance that still feels current.",
+    description: "La Vie Est Belle and Idôle define a warm, optimistic, and feminine fragrance identity with luxurious comfort and depth.",
     image: "/assets/brands/lancome-hero.png",
     signatureScents: [
       {
         name: "La Vie Est Belle",
+        image: "/assets/scents/lancome-lveb.jpg",
+        family: "Floral Gourmand",
         notes: ["iris", "praline", "patchouli"],
         mood: "Joyful, warm, and elegantly sweet.",
-      },
-      {
-        name: "Trésor",
-        notes: ["rose", "peach", "musk"],
-        mood: "Romantic, soft, and timeless.",
+        description: "The fragrance of happiness, blending the nobility of Iris Pallida with the depth of patchouli and an addictive gourmand accord.",
+        longevity: "Very long lasting",
+        sillage: "Strong",
+        bestFor: ["Celebrations", "Cold weather", "Signature warmth"],
+        ultraFit: ["Optimistic profiles", "Sweet-floral lovers", "High-longevity seekers"],
+        safetyNote: "Ultra flags the intense praline sweetness for users with sensitivity to heavy gourmands."
       },
       {
         name: "Idôle",
+        image: "/assets/scents/lancome-idole.jpg",
+        family: "Chypre Floral",
         notes: ["rose", "jasmine", "clean musk"],
         mood: "Modern, uplifting, and bright.",
-      },
+        description: "A clean, radiant floral designed for a new generation, focusing on sustainable rose essences and a 'skin-like' musk.",
+        longevity: "Moderate to long",
+        sillage: "Moderate",
+        bestFor: ["Daily elegance", "Spring/Summer", "Office environments"],
+        ultraFit: ["Modern minimalists", "Clean floral lovers", "Daytime polish"],
+        safetyNote: "The high rose content may be flagged for users with specific floral allergies."
+      }
     ],
     olfactiveProfile: ["floral-gourmand", "soft musk", "radiant feminine", "signature warmth"],
     ultraMatch: [
       "Best for polished daywear, romantic occasions, and soft luxury dressing.",
       "Matches users who want beauty, softness, and warmth without shouting.",
-      "Strong fit for elegant, clean, and universally appealing profiles.",
+      "Strong fit for elegant, clean, and universally appealing profiles."
     ],
-    refillStory:
-      "Lancôme is ideal for a refill-forward luxury journey: iconic bottles, long-term use, and less waste.",
-    safetyStory:
-      "Ultra can guide sensitive users toward cleaner, softer options when floral sweetness might be too intense.",
+    refillStory: "Lancôme is ideal for a refill-forward luxury journey: iconic bottles, long-term use, and less waste.",
+    safetyStory: "Ultra can guide sensitive users toward cleaner, softer options when floral sweetness might be too intense.",
     luxurySignals: ["French elegance", "optimistic femininity", "global recognition", "refill friendly"],
-    relatedSlugs: ["ysl", "armani", "valentino"],
+    relatedSlugs: ["ysl", "armani", "valentino"]
   },
   {
     slug: "armani",
@@ -164,42 +176,48 @@ export const brandRegistry: BrandProfile[] = [
     name: "Giorgio Armani",
     category: "Couture Icon",
     tagline: "Refined. Minimal. Effortlessly sensual.",
-    intro:
-      "Armani fragrance codes feel polished, sophisticated, and quietly confident.",
-    heroStatement:
-      "A house for clean luxury and graceful restraint — never loud, always present.",
-    description:
-      "Si and Acqua di Giò show the Armani balance: elegant warmth, airy freshness, and timeless wearability.",
+    intro: "Armani fragrance codes feel polished, sophisticated, and quietly confident.",
+    heroStatement: "A house for clean luxury and graceful restraint — never loud, always present.",
+    description: "Si and Acqua di Giò show the Armani balance: elegant warmth, airy freshness, and timeless wearability.",
     image: "/assets/brands/armani-hero.png",
     signatureScents: [
       {
-        name: "Si",
-        notes: ["blackcurrant", "rose", "vanilla"],
+        name: "Sì",
+        image: "/assets/scents/armani-si.jpg",
+        family: "Chypre Fruity",
+        notes: ["blackcurrant nectar", "rose of may", "oakmoss"],
         mood: "Feminine, smooth, and refined.",
+        description: "A chic, sultry, and intense fragrance that reinterprets the chypre family with blackcurrant nectar and light musky woods.",
+        longevity: "Long lasting",
+        sillage: "Moderate",
+        bestFor: ["Autumn days", "Romantic dinners", "Sophisticated presence"],
+        ultraFit: ["Refined profiles", "Chypre lovers", "Classic elegance"],
+        safetyNote: "Ultra notes the oakmoss and blackcurrant as potentially deep, heavy notes for sensitive palates."
       },
       {
         name: "Acqua di Giò",
-        notes: ["marine", "bergamot", "woods"],
+        image: "/assets/scents/armani-adg.jpg",
+        family: "Aromatic Marine",
+        notes: ["marine notes", "bergamot", "cedarwood"],
         mood: "Fresh, clean, and effortlessly classic.",
-      },
-      {
-        name: "Stronger With You",
-        notes: ["chestnut", "spice", "amber"],
-        mood: "Warm, modern, and magnetic.",
-      },
+        description: "Inspired by the sea, sun, and earth of an Italian island, this is the definitive fresh aquatic fragrance for men.",
+        longevity: "Moderate",
+        sillage: "Moderate",
+        bestFor: ["Summer mornings", "Outdoor activities", "Casual luxury"],
+        ultraFit: ["Active lifestyles", "Fresh aquatic lovers", "Understated men"],
+        safetyNote: "The calone-based marine notes are flagged for users who experience 'sea-scent' headaches."
+      }
     ],
     olfactiveProfile: ["fresh woody", "elegant amber", "clean luxury", "day-to-night"],
     ultraMatch: [
       "Best for understated luxury, workwear, and everyday elegance.",
       "Matches users who prefer clean sophistication over heavy projection.",
-      "Strong fit for polished tailoring, crisp silhouettes, and quiet confidence.",
+      "Strong fit for polished tailoring, crisp silhouettes, and quiet confidence."
     ],
-    refillStory:
-      "Armani fragrances are perfect for a refill ritual: enduring design, repeated use, less packaging waste.",
-    safetyStory:
-      "Ultra can reduce over-selection of strong marine or spicy profiles for users with sensitivity flags.",
+    refillStory: "Armani fragrances are perfect for a refill ritual: enduring design, repeated use, less packaging waste.",
+    safetyStory: "Ultra can reduce over-selection of strong marine or spicy profiles for users with sensitivity flags.",
     luxurySignals: ["quiet luxury", "minimalist aesthetic", "timeless wear", "high versatility"],
-    relatedSlugs: ["ysl", "lancome", "prada"],
+    relatedSlugs: ["ysl", "lancome", "prada"]
   },
   {
     slug: "prada",
@@ -207,36 +225,47 @@ export const brandRegistry: BrandProfile[] = [
     name: "Prada",
     category: "Couture Icon",
     tagline: "Architectural. Intelligent. Modern.",
-    intro:
-      "Prada fragrance feels conceptual, polished, and fashion-forward.",
-    heroStatement:
-      "A house for people who love structure, intelligence, and a modern point of view.",
-    description:
-      "Paradoxe and Luna Rossa balance innovation, clarity, and a cool contemporary signature.",
+    intro: "Prada fragrance feels conceptual, polished, and fashion-forward.",
+    heroStatement: "A house for people who love structure, intelligence, and a modern point of view.",
+    description: "Paradoxe and Luna Rossa balance innovation, clarity, and a cool contemporary signature.",
     image: "/assets/brands/prada-hero.png",
     signatureScents: [
       {
         name: "Paradoxe",
+        image: "/assets/scents/prada-paradoxe.jpg",
+        family: "Amber Floral",
         notes: ["neroli", "amber", "white musk"],
         mood: "Softly radiant and modern.",
+        description: "A fragrance that celebrates the multi-dimensional self, featuring a revolutionary bio-converted amber for warmth.",
+        longevity: "Long lasting",
+        sillage: "Moderate",
+        bestFor: ["Daily signatures", "Fashion events", "Contemporary styling"],
+        ultraFit: ["Modernist profiles", "Amber-floral lovers", "Structured scents"],
+        safetyNote: "Ultra notes the neroli as a potential sharp floral for those sensitive to white flowers."
       },
       {
-        name: "Luna Rossa",
-        notes: ["lavender", "mint", "ambrette"],
+        name: "Luna Rossa Ocean",
+        image: "/assets/scents/prada-luna-rossa.jpg",
+        family: "Aromatic Fougere",
+        notes: ["iris", "lavender", "vetiver"],
         mood: "Clean, dynamic, and urban.",
-      },
+        description: "A neo-fresh fragrance that reinvents the classic fougere with the elegance of Iris and the strength of vetiver.",
+        longevity: "Moderate",
+        sillage: "Moderate",
+        bestFor: ["Office wear", "Urban weekends", "Tech-focused style"],
+        ultraFit: ["Clean-scent lovers", "Iris fans", "Professional men"],
+        safetyNote: "Ultra flags the metallic iris note for users who prefer warm, natural earthy tones."
+      }
     ],
     olfactiveProfile: ["fresh amber", "soft musk", "modern floral", "architectural polish"],
     ultraMatch: [
       "Best for modern, intentional users who want structure and style.",
-      "Matches crisp dressing, contemporary silhouettes, and a cool finish.",
+      "Matches crisp dressing, contemporary silhouettes, and a cool finish."
     ],
-    refillStory:
-      "Prada’s elegant bottle language works beautifully in refill-led luxury rituals.",
-    safetyStory:
-      "Ultra can steer sensitive users away from sharper clean-musky combinations if needed.",
+    refillStory: "Prada’s elegant bottle language works beautifully in refill-led luxury rituals.",
+    safetyStory: "Ultra can steer sensitive users away from sharper clean-musky combinations if needed.",
     luxurySignals: ["modern couture", "architectural identity", "clean luxury", "intelligent design"],
-    relatedSlugs: ["ysl", "armani", "valentino"],
+    relatedSlugs: ["ysl", "armani", "valentino"]
   },
   {
     slug: "valentino",
@@ -244,36 +273,47 @@ export const brandRegistry: BrandProfile[] = [
     name: "Valentino",
     category: "Couture Icon",
     tagline: "Romantic. Bold. Couture-led.",
-    intro:
-      "Valentino fragrance blends romance and fashion energy with a distinct couture mood.",
-    heroStatement:
-      "A house for expressive elegance — textured, glamorous, and emotionally rich.",
-    description:
-      "Born in Roma and Donna/Uomo present a stylish balance of floral warmth, amber texture, and fashion attitude.",
+    intro: "Valentino fragrance blends romance and fashion energy with a distinct couture mood.",
+    heroStatement: "A house for expressive elegance — textured, glamorous, and emotionally rich.",
+    description: "Born in Roma and Donna/Uomo present a stylish balance of floral warmth, amber texture, and fashion attitude.",
     image: "/assets/brands/valentino-hero.png",
     signatureScents: [
       {
         name: "Born in Roma Donna",
-        notes: ["jasmine", "vanilla", "woods"],
+        image: "/assets/scents/valentino-bir-donna.jpg",
+        family: "Amber Floral",
+        notes: ["jasmine", "vanilla", "woody notes"],
         mood: "Modern femininity with impact.",
+        description: "A floriental fragrance boosted by a woody overdose, celebrating Roman street style and high fashion.",
+        longevity: "Long lasting",
+        sillage: "Moderate to Strong",
+        bestFor: ["Evening events", "Statement street style", "Romantic nights"],
+        ultraFit: ["Bold romanticists", "Vanilla-floral fans", "High-texture seekers"],
+        safetyNote: "Ultra identifies the woody-amber base as potentially heavy for daytime summer heat."
       },
       {
         name: "Born in Roma Uomo",
-        notes: ["violet leaf", "sage", "smoked vetiver"],
+        image: "/assets/scents/valentino-bir-uomo.jpg",
+        family: "Woody Aromatic",
+        notes: ["violet leaf", "ginger", "vetiver"],
         mood: "Fresh, textured, and stylishly masculine.",
-      },
+        description: "A cool, vibrant fragrance that mixes salt, ginger, and smoked vetiver for a modern Roman edge.",
+        longevity: "Long lasting",
+        sillage: "Moderate",
+        bestFor: ["All-day signatures", "Clubbing", "Fashionable social scenes"],
+        ultraFit: ["Vibrant men", "Textured-wood lovers", "Street-couture fans"],
+        safetyNote: "Ultra notes the ginger and salt notes as potential irritants for very sensitive aromatic preferences."
+      }
     ],
     olfactiveProfile: ["floral amber", "textured woods", "romantic couture", "fashion-led"],
     ultraMatch: [
       "Best for dressed-up evenings and elevated social moments.",
-      "Matches users who want romance with structure and confidence.",
+      "Matches users who want romance with structure and confidence."
     ],
-    refillStory:
-      "Valentino’s sculptural bottle language is ideal for beauty rituals that last.",
-    safetyStory:
-      "Ultra can manage stronger amber and floral impressions through the Safety Passport.",
+    refillStory: "Valentino’s sculptural bottle language is ideal for beauty rituals that last.",
+    safetyStory: "Ultra can manage stronger amber and floral impressions through the Safety Passport.",
     luxurySignals: ["couture romance", "statement bottle design", "emotional luxury", "red-carpet energy"],
-    relatedSlugs: ["ysl", "lancome", "prada"],
+    relatedSlugs: ["ysl", "lancome", "prada"]
   },
   {
     slug: "mugler",
@@ -281,12 +321,9 @@ export const brandRegistry: BrandProfile[] = [
     name: "Mugler",
     category: "Statement House",
     tagline: "Futuristic. Powerful. Distinctive.",
-    intro:
-      "Mugler fragrance is designed to stand out, not blend in.",
-    heroStatement:
-      "A house for unforgettable trail and high-impact scent identity.",
-    description:
-      "Angel and Alien are sculptural, intense, and instantly recognizable.",
+    intro: "Mugler fragrance is designed to stand out, not blend in.",
+    heroStatement: "A house for unforgettable trail and high-impact scent identity.",
+    description: "Angel and Alien are sculptural, intense, and instantly recognizable.",
     image: "/assets/brands/mugler-hero.png",
     signatureScents: [
       {
@@ -294,43 +331,37 @@ export const brandRegistry: BrandProfile[] = [
         image: "/assets/scents/mugler-angel.jpg",
         family: "Gourmand Amber",
         mood: "Iconic, loud, and addictive.",
-        description:
-          "A signature fragrance with bold sweetness, strong projection, and a highly recognizable trail.",
+        description: "A signature fragrance with bold sweetness, strong projection, and a highly recognizable trail.",
         notes: ["patchouli", "praline", "red fruits"],
         longevity: "Very long lasting",
         sillage: "Strong",
         bestFor: ["Night-out looks", "Statement wear", "Confident personalities"],
         ultraFit: ["High-impact evening", "Memorable first impression", "Bold trail lovers"],
-        safetyNote:
-          "Ultra may flag this for users sensitive to intense gourmand sweetness or strong projection.",
+        safetyNote: "Ultra may flag this for users sensitive to intense gourmand sweetness or strong projection."
       },
       {
         name: "Alien",
         image: "/assets/scents/mugler-alien.jpg",
         family: "Amber Floral",
         mood: "Mystical, luminous, and potent.",
-        description:
-          "A radiant scent with a powerful floral heart and a rich amber finish.",
+        description: "A radiant scent with a powerful floral heart and a rich amber finish.",
         notes: ["jasmine", "amberwood", "white amber"],
         longevity: "Long lasting",
         sillage: "Strong",
         bestFor: ["Elegant evenings", "Couture styling", "Luminous signature wear"],
         ultraFit: ["Luxury presence", "Evening glamour", "Distinctive identity"],
-        safetyNote:
-          "Ultra may recommend a lighter alternative if the user prefers subtle, low-projection fragrances.",
-      },
+        safetyNote: "Ultra may recommend a lighter alternative if the user prefers subtle, low-projection fragrances."
+      }
     ],
     olfactiveProfile: ["intense gourmand", "amber power", "high trail", "signature boldness"],
     ultraMatch: [
       "Best for users who want a strong personal signature.",
-      "Matches dramatic styling and nighttime statements.",
+      "Matches dramatic styling and nighttime statements."
     ],
-    refillStory:
-      "Mugler has a strong refill culture, making signature fragrance more sustainable over time.",
-    safetyStory:
-      "Ultra should be careful with higher-intensity formulations for sensitive users and offer lighter alternatives.",
+    refillStory: "Mugler has a strong refill culture, making signature fragrance more sustainable over time.",
+    safetyStory: "Ultra should be careful with higher-intensity formulations for sensitive users and offer lighter alternatives.",
     luxurySignals: ["futuristic identity", "high projection", "iconic bottles", "distinctive trail"],
-    relatedSlugs: ["ysl", "valentino", "azzaro"],
+    relatedSlugs: ["ysl", "valentino", "azzaro"]
   },
   {
     slug: "maison-margiela",
@@ -338,36 +369,47 @@ export const brandRegistry: BrandProfile[] = [
     name: "Maison Margiela",
     category: "Artistic & Niche",
     tagline: "Memory-led. Conceptual. Quietly powerful.",
-    intro:
-      "Replica fragrances are built around moments, places, and emotion.",
-    heroStatement:
-      "A house for people who love storytelling through scent.",
-    description:
-      "Replica creates atmospheric experiences that feel intimate and cinematic.",
+    intro: "Replica fragrances are built around moments, places, and emotion.",
+    heroStatement: "A house for people who love storytelling through scent.",
+    description: "Replica creates atmospheric experiences that feel intimate and cinematic.",
     image: "/assets/brands/margiela-hero.png",
     signatureScents: [
       {
-        name: "Replica Jazz Club",
-        notes: ["rum", "tobacco", "vanilla"],
+        name: "Jazz Club",
+        image: "/assets/scents/margiela-jazz-club.jpg",
+        family: "Amber Woody",
+        notes: ["rum", "tobacco leaf", "vanilla bean"],
         mood: "Warm, smoky, and atmospheric.",
+        description: "Captures the ambiance of a Brooklyn jazz club: the cocktail aroma, the smooth leather chairs, and the smoke.",
+        longevity: "Long lasting",
+        sillage: "Moderate",
+        bestFor: ["Winter nights", "Intimate bars", "Creative professionals"],
+        ultraFit: ["Atmospheric lovers", "Boozy-tobacco fans", "Curated identities"],
+        safetyNote: "Ultra flags the tobacco note for users who prefer 'clean/soap' profiles."
       },
       {
-        name: "Replica Lazy Sunday Morning",
+        name: "Lazy Sunday Morning",
+        image: "/assets/scents/margiela-lazy-sunday.jpg",
+        family: "Floral Woody Musk",
         notes: ["white musk", "iris", "pear"],
         mood: "Soft, clean, and comforting.",
-      },
+        description: "The feeling of fresh cotton sheets and the glow of a summer morning sun on skin.",
+        longevity: "Moderate",
+        sillage: "Intimate",
+        bestFor: ["Weekend mornings", "Office wear", "Skin-scent lovers"],
+        ultraFit: ["Clean-aesthetic fans", "Soft-floral lovers", "Subtle presence"],
+        safetyNote: "Ultra identifies this as highly safe for scent-sensitive environments."
+      }
     ],
     olfactiveProfile: ["memory scent", "soft atmospheric", "conceptual", "skin-close"],
     ultraMatch: [
       "Best for users who want personality without loudness.",
-      "Matches editorial, creative, and minimal style identities.",
+      "Matches editorial, creative, and minimal style identities."
     ],
-    refillStory:
-      "The storytelling-led nature of the line supports mindful ownership and curated use.",
-    safetyStory:
-      "Ultra can help users select lighter, skin-close profiles where projection sensitivity matters.",
+    refillStory: "The storytelling-led nature of the line supports mindful ownership and curated use.",
+    safetyStory: "Ultra can help users select lighter, skin-close profiles where projection sensitivity matters.",
     luxurySignals: ["narrative fragrance", "editorial luxury", "skin-close", "emotional memory"],
-    relatedSlugs: ["lancome", "prada", "atelier-cologne"],
+    relatedSlugs: ["lancome", "prada", "atelier-cologne"]
   },
   {
     slug: "viktor-rolf",
@@ -375,31 +417,47 @@ export const brandRegistry: BrandProfile[] = [
     name: "Viktor&Rolf",
     category: "Statement House",
     tagline: "Playful. Floral. Dramatic.",
-    intro:
-      "A house that balances fantasy with sharp, memorable identity.",
-    heroStatement:
-      "A fragrance world with strong floral presence and high visual impact.",
-    description:
-      "Flowerbomb remains a modern icon for rich floral drama and instant recognition.",
+    intro: "A house that balances fantasy with sharp, memorable identity.",
+    heroStatement: "A fragrance world with strong floral presence and high visual impact.",
+    description: "Flowerbomb remains a modern icon for rich floral drama and instant recognition.",
     image: "/assets/brands/viktor-rolf-hero.png",
     signatureScents: [
       {
         name: "Flowerbomb",
-        notes: ["jasmine", "orange blossom", "patchouli"],
+        image: "/assets/scents/vr-flowerbomb.jpg",
+        family: "Amber Floral",
+        notes: ["cattleya orchid", "jasmine", "patchouli"],
         mood: "Opulent, floral, and memorable.",
+        description: "A floral explosion that turns the most negative reality into a positive one through an overdose of petals.",
+        longevity: "Long lasting",
+        sillage: "Strong",
+        bestFor: ["Weddings", "Gifts", "Spring evenings"],
+        ultraFit: ["High-floral lovers", "Romantic profiles", "Instant-classic seekers"],
+        safetyNote: "Ultra flags the orchid/jasmine explosion for those prone to floral-induced headaches."
       },
+      {
+        name: "Spicebomb",
+        image: "/assets/scents/vr-spicebomb.jpg",
+        family: "Woody Spicy",
+        notes: ["pink pepper", "cinnamon", "tobacco"],
+        mood: "Fiery, intense, and charismatic.",
+        description: "A detonation of spices including chili and saffron, balanced by leather and tobacco for a masculine punch.",
+        longevity: "Long lasting",
+        sillage: "Moderate to Strong",
+        bestFor: ["Winter fashion", "Evening social scenes", "Statement masculinity"],
+        ultraFit: ["Spicy-scent lovers", "Bold men", "Warm-profile fans"],
+        safetyNote: "The pink pepper and chili notes are flagged by Ultra as potential 'nose-ticklers' for sensitive users."
+      }
     ],
     olfactiveProfile: ["floral explosion", "dramatic", "women's signature", "high recall"],
     ultraMatch: [
       "Best for users who love floral presence with strong personality.",
-      "Matches dressy, romantic, and evening styling.",
+      "Matches dressy, romantic, and evening styling."
     ],
-    refillStory:
-      "A long-term signature scent like Flowerbomb supports refill and repeat-use behavior.",
-    safetyStory:
-      "Ultra can present softer floral alternatives if the profile is too intense for sensitivity.",
+    refillStory: "A long-term signature scent like Flowerbomb supports refill and repeat-use behavior.",
+    safetyStory: "Ultra can present softer floral alternatives if the profile is too intense for sensitivity.",
     luxurySignals: ["modern classic", "floral drama", "high recognizability", "gift friendly"],
-    relatedSlugs: ["ysl", "lancome", "valentino"],
+    relatedSlugs: ["ysl", "lancome", "valentino"]
   },
   {
     slug: "azzaro",
@@ -407,36 +465,34 @@ export const brandRegistry: BrandProfile[] = [
     name: "Azzaro",
     category: "Statement House",
     tagline: "Confident. Charismatic. Energetic.",
-    intro:
-      "Azzaro fragrances bring strong social energy and approachable luxury.",
-    heroStatement:
-      "A house for momentum, charm, and bold everyday wear.",
-    description:
-      "Wanted and Azzaro Pour Homme offer versatile profiles with contemporary character.",
+    intro: "Azzaro fragrances bring strong social energy and approachable luxury.",
+    heroStatement: "A house for momentum, charm, and bold everyday wear.",
+    description: "Wanted and Azzaro Pour Homme offer versatile profiles with contemporary character.",
     image: "/assets/brands/azzaro-hero.png",
     signatureScents: [
       {
         name: "Wanted",
-        notes: ["cardamom", "tonka", "amberwood"],
+        image: "/assets/scents/azzaro-wanted.jpg",
+        family: "Woody Spicy",
+        notes: ["lemon", "cardamom", "tonka bean"],
         mood: "Bold, warm, and crowd-pleasing.",
-      },
-      {
-        name: "Azzaro Pour Homme",
-        notes: ["lavender", "anise", "woods"],
-        mood: "Classic masculine freshness.",
-      },
+        description: "Designed for the man who takes chances and trusts his instincts, featuring a solar, woody freshness.",
+        longevity: "Long lasting",
+        sillage: "Moderate to Strong",
+        bestFor: ["Night out", "Confidence boost", "All-season wear"],
+        ultraFit: ["Extroverted profiles", "Spicy-fresh lovers", "Action-oriented men"],
+        safetyNote: "Ultra identifies the metallic cardamom note as a potential high-intensity focal point."
+      }
     ],
     olfactiveProfile: ["masculine amber", "spicy freshness", "versatile", "easy confidence"],
     ultraMatch: [
       "Best for everyday wear, social settings, and energetic profiles.",
-      "Matches users who want character without overcomplication.",
+      "Matches users who want character without overcomplication."
     ],
-    refillStory:
-      "Repeated-use signature scents are perfect candidates for refill adoption.",
-    safetyStory:
-      "Ultra can reduce overlap with stronger aromatic blends if user sensitivity is high.",
+    refillStory: "Repeated-use signature scents are perfect candidates for refill adoption.",
+    safetyStory: "Ultra can reduce overlap with stronger aromatic blends if user sensitivity is high.",
     luxurySignals: ["broad appeal", "charismatic identity", "masculine classics", "high versatility"],
-    relatedSlugs: ["armani", "mugler", "ralph-lauren"],
+    relatedSlugs: ["armani", "mugler", "ralph-lauren"]
   },
   {
     slug: "diesel",
@@ -444,30 +500,33 @@ export const brandRegistry: BrandProfile[] = [
     name: "Diesel",
     category: "Statement House",
     tagline: "Urban. Youthful. Unapologetic.",
-    intro:
-      "Diesel fragrance speaks to contemporary street-luxury energy.",
-    heroStatement:
-      "A house for modern, casual, and expressive scent wearers.",
-    description:
-      "Built for a younger, more urban luxury audience with clear personality.",
+    intro: "Diesel fragrance speaks to contemporary street-luxury energy.",
+    heroStatement: "A house for modern, casual, and expressive scent wearers.",
+    description: "Built for a younger, more urban luxury audience with clear personality.",
     image: "/assets/brands/diesel-hero.png",
     signatureScents: [
       {
-        name: "Signature line",
-        notes: ["fresh woods", "amber", "spice"],
+        name: "Only The Brave",
+        image: "/assets/scents/diesel-otb.jpg",
+        family: "Amber Woody",
+        notes: ["lemon", "leather", "amber"],
         mood: "Urban and modern.",
-      },
+        description: "The iconic fist bottle represents the strength and determination of a man who lives his life with conviction.",
+        longevity: "Moderate",
+        sillage: "Moderate",
+        bestFor: ["Casual daily wear", "Gym transitions", "Street style"],
+        ultraFit: ["Younger demographic", "Leather-fresh lovers", "Active lifestyles"],
+        safetyNote: "Ultra identifies the synthetic leather note as a potential flag for fans of natural-only oils."
+      }
     ],
     olfactiveProfile: ["youthful", "urban woods", "modern casual", "easy wear"],
     ultraMatch: [
-      "Best for users who want everyday energy and modern edge.",
+      "Best for users who want everyday energy and modern edge."
     ],
-    refillStory:
-      "A straightforward daily signature can support refill and repeat purchase behavior.",
-    safetyStory:
-      "Ultra can suggest softer options when strong synthetic accords need to be avoided.",
+    refillStory: "A straightforward daily signature can support refill and repeat purchase behavior.",
+    safetyStory: "Ultra can suggest softer options when strong synthetic accords need to be avoided.",
     luxurySignals: ["street luxury", "modern youth", "easy everyday", "contemporary"],
-    relatedSlugs: ["azzaro", "ralph-lauren", "armani"],
+    relatedSlugs: ["azzaro", "ralph-lauren", "armani"]
   },
   {
     slug: "ralph-lauren",
@@ -475,30 +534,33 @@ export const brandRegistry: BrandProfile[] = [
     name: "Ralph Lauren",
     category: "Statement House",
     tagline: "Classic. Polished. Lifestyle-led.",
-    intro:
-      "Ralph Lauren fragrance carries a classic American luxury mood.",
-    heroStatement:
-      "A house for clean, confident, lifestyle-driven fragrance.",
-    description:
-      "Polo and related lines sit in the space of classic sporting elegance and refined masculinity.",
+    intro: "Ralph Lauren fragrance carries a classic American luxury mood.",
+    heroStatement: "A house for clean, confident, lifestyle-driven fragrance.",
+    description: "Polo and related lines sit in the space of classic sporting elegance and refined masculinity.",
     image: "/assets/brands/ralph-lauren-hero.png",
     signatureScents: [
       {
-        name: "Polo collection",
-        notes: ["woods", "aromatics", "fresh spice"],
+        name: "Polo Blue",
+        image: "/assets/scents/rl-polo-blue.jpg",
+        family: "Aromatic Fougere",
+        notes: ["cucumber", "basil", "washed suede"],
         mood: "Classic, sporty, and polished.",
-      },
+        description: "Evokes the freedom of the big blue sky and the energy of the open waters.",
+        longevity: "Moderate",
+        sillage: "Moderate",
+        bestFor: ["Daytime office", "Country club weekends", "Summer casual"],
+        ultraFit: ["Classic men", "Aquatic-aromatic fans", "Lifestyle-focused wearers"],
+        safetyNote: "Ultra flags the melon/cucumber note for users who dislike 'watery' fruity accords."
+      }
     ],
     olfactiveProfile: ["sporty classic", "clean masculine", "lifestyle luxury", "easy confidence"],
     ultraMatch: [
-      "Best for users who want familiar, polished, and easy-to-wear luxury.",
+      "Best for users who want familiar, polished, and easy-to-wear luxury."
     ],
-    refillStory:
-      "Classic signatures benefit from repeat-use and refill efficiency.",
-    safetyStory:
-      "Ultra can surface cleaner, lighter options when dense aromatic blends are not ideal.",
+    refillStory: "Classic signatures benefit from repeat-use and refill efficiency.",
+    safetyStory: "Ultra can surface cleaner, lighter options when dense aromatic blends are not ideal.",
     luxurySignals: ["American luxury", "classic identity", "lifestyle fragrance", "broad appeal"],
-    relatedSlugs: ["armani", "azzaro", "prada"],
+    relatedSlugs: ["armani", "azzaro", "prada"]
   },
   {
     slug: "atelier-cologne",
@@ -506,31 +568,34 @@ export const brandRegistry: BrandProfile[] = [
     name: "Atelier Cologne",
     category: "Artistic & Niche",
     tagline: "Bright. Crafted. Refined.",
-    intro:
-      "Atelier Cologne is about high-end freshness with a craft-led edge.",
-    heroStatement:
-      "A house for elegant brightness and refined cologne expression.",
-    description:
-      "Cologne Absolues offer a clean, polished, and niche-feeling fragrance experience.",
+    intro: "Atelier Cologne is about high-end freshness with a craft-led edge.",
+    heroStatement: "A house for elegant brightness and refined cologne expression.",
+    description: "Cologne Absolues offer a clean, polished, and niche-feeling fragrance experience.",
     image: "/assets/brands/atelier-cologne-hero.png",
     signatureScents: [
       {
-        name: "Cologne Absolues",
-        notes: ["citrus", "woods", "aromatics"],
+        name: "Orange Sanguine",
+        image: "/assets/scents/atelier-orange-sanguine.jpg",
+        family: "Citrus",
+        notes: ["blood orange", "geranium", "sandalwood"],
         mood: "Fresh, crafted, and elevated.",
-      },
+        description: "A zesty, realistic citrus experience that feels like breakfast on a sun-drenched terrace.",
+        longevity: "Moderate",
+        sillage: "Moderate",
+        bestFor: ["Summer mornings", "Energy boost", "Travel signatures"],
+        ultraFit: ["Citrus purists", "Niche-fresh fans", "Natural-vibe seekers"],
+        safetyNote: "Ultra flags the high citrus oil content for users with potential topical sensitivity."
+      }
     ],
     olfactiveProfile: ["bright fresh", "crafted cologne", "niche polish", "clean modern"],
     ultraMatch: [
-      "Best for users who love a bright but premium scent identity.",
+      "Best for users who love a bright but premium scent identity."
     ],
-    refillStory:
-      "High-use fresh fragrances are natural candidates for refill strategy.",
-    safetyStory:
-      "Ultra can guide users with citrus sensitivity to alternatives that still feel fresh.",
+    refillStory: "High-use fresh fragrances are natural candidates for refill strategy.",
+    safetyStory: "Ultra can guide users with citrus sensitivity to alternatives that still feel fresh.",
     luxurySignals: ["niche freshness", "craft-led", "bright luxury", "elevated cologne"],
-    relatedSlugs: ["maison-margiela", "prada", "armani"],
-  },
+    relatedSlugs: ["maison-margiela", "prada", "armani"]
+  }
 ];
 
 export const brandBySlug = Object.fromEntries(
